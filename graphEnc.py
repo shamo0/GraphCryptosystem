@@ -27,7 +27,22 @@ class Graph:
 	def fromDotFile(filename) :
 	'''Build Graph from named .dot file provided as argument.
 	'''
-		...
+		fd = open(file,'r')
+        file_read = fd.readline()
+        while file_read!="":
+            if file_read.startswith("graph"):
+                file_read = fd.readline()
+                continue
+            elif file_read.startswith("}"):
+                break
+            split = file_read.strip(";\t\n").split("--")
+            split0 = split[0].strip()
+            split1 = split[1].strip()
+            if split0 not in self.stringToVertex:
+                self.stringToVertex[Vertex(split0)].adjList.append(split1)
+            elif split0 in self.stringToVertex:
+                self.stringToVertex[split0].adjList.append(split1)
+            file_read = fd.readline()
 
 	def encrypt(self, plaintext) :
 	'''Encrypt the plaintext, returning the ciphertext as a single string.
