@@ -19,11 +19,11 @@ def main():
         if privateTextRead.strip() in dictCipher:
             sum+=int(dictCipher[privateTextRead.strip()])
         privateTextRead = privateTextFd.readline()
-    print(intToStr(sum))
+    print(intToStr(int(abs(sum))))
 
 def intToStr(daInt) :
-  b = daInt.to_bytes((daInt.bit_length() // 8)+1, byteorder='big')
-  str = b.decode('ascii')
-  return str
+    b = daInt.to_bytes((daInt.bit_length() // 8)+1, byteorder='big')
+    str = b.decode('ascii')
+    return str
 
 main()
