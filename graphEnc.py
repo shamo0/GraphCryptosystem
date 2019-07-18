@@ -1,4 +1,17 @@
 #!/usr/bin/env python3
+'''
+      Author: Genadi Shamugia
+       Alpha: 216126
+        Date: July 18, 2019
+Program Name: Encryption
+Program Description:
+	Program builds a graph using a dot file. The encrypted plaintext is turned
+	into an integer('message'). We assign a random number to all the vertices in the graph
+	such that the sum of all the numbers equals the 'message'. The second number for every
+	vertex is the sum of its own first and the first of all adjacent vertices. Then
+	we turn the vertices and their second values into a ciphertext which can only be decrypted
+	given the private key.
+'''
 
 import random
 
@@ -33,8 +46,8 @@ class Graph:
 	def fromDotFile(self,filename) :
 		'''Build Graph from named .dot file provided as argument.
 		'''
-		fd = open(filename,'r')
-		file_read = fd.readline()
+		fd = open(filename,'r') #Open dotFile to read
+		file_read = fd.readline() #Read file line by line
 		while file_read!="":
 			if "{" in file_read:
 				file_read = fd.readline()
@@ -44,12 +57,6 @@ class Graph:
 			split = file_read.strip(";\t\n").split("--")
 			split0 = split[0].strip()
 			split1 = split[1].strip()
-			# print(self.adjList)
-			# if split0 not in self.stringToVertex:
-			# 	self.stringToVertex[split0]=Vertex(split0)
-			# 	self.adjList[self.stringToVertex[split0]]=[split1]
-			# elif split0 in self.stringToVertex:
-			# 	self.adjList[self.stringToVertex[split0]].append(split1)
 			if split0 not in self.stringToVertex:
 				self.stringToVertex[split0]=Vertex(split0)
 				self.adjList[split0]=[split1]
@@ -66,7 +73,6 @@ class Graph:
 
 	def strToInt(self,msg) :
 		msg = int.from_bytes(str.encode(msg,'ascii'), byteorder='big')
-		print(msg,"=Encrypted")
 		return msg
 
 	def encrypt(self, plaintext) :
@@ -76,10 +82,10 @@ class Graph:
 		message = self.strToInt(plaintext)
 		sum = 0
 		for item in self.stringToVertex:
-			int = random.randint(-message,message)
-			sum+=int
+			int = random.randint(-message,message) #generate a random number
+			sum+=int #add random number to sum
 			self.stringToVertex[item].first=int
-			end = item
+			end = item #save the last number
 		sum = sum-self.stringToVertex[end].first
 		self.stringToVertex[end].first= message - sum
 		sum+= self.stringToVertex[end].first
@@ -89,7 +95,7 @@ class Graph:
 			for key in self.adjList[item]:
 				second+=self.stringToVertex[key].first
 			self.stringToVertex[item].second = second +self.stringToVertex[item].first
-		fdWrite = open("cipher.txt",'w')
+		fdWrite = open("ciphertext.txt",'w')
 		for item in self.stringToVertex:
 			string = str(item)+" "+str(self.stringToVertex[item].second)+"\n"
 			fdWrite.write(string)
@@ -98,8 +104,9 @@ def main() :
 	'''main function.
 	'''
 	testGraph = Graph()
-	testGraph.fromDotFile('public.dot')
-	testGraph.encrypt('thisisatestmotherfucker')
+	testGraph.fromDotFile('public.dot') #Build a graph from desired dot file
+	testGraph.encrypt('I think that deserves a 100') #Enter message to encrypt
 
 if ( __name__ == "__main__" ) :
 	main()
+
