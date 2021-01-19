@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 '''
-      Author: Genadi Shamugia
-       Alpha: 216126
+      Author: shamo0
         Date: July 18, 2019
 Program Name: Decryption
 Program Description:
